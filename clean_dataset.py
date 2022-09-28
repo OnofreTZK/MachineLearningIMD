@@ -2,9 +2,6 @@ from os import listdir, remove
 
 dataset_filename_list = listdir('./dataset')
 
-#for i in range(0, 50):
-#    print(dataset_filename_list[i])
-
 class1 = 'staffordshire_bull_terrier'
 class2 = 'wheaten_terrier'
 class3 = 'samoyed'
