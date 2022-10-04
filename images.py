@@ -3,6 +3,7 @@ from skimage.io import imread, imshow
 from skimage.feature import hog
 from skimage.color import rgb2gray
 from skimage import exposure, data
+from sklearn.decomposition import PCA
 from io import BytesIO
 from os import listdir, mkdir
 
@@ -17,6 +18,14 @@ class3 = 'samoyed'
 class4 = 'Bombay'
 class5 = 'Ragdoll'
 
+def print_img_info(imgarr_arr, filename, flag):
+    '''Function to print and plot a single image'''
+
+    if flag:
+        imshow(imgarr_arr[0])
+        plt.savefig(f'./{filename}.png')
+        print(imgarr_arr[0].shape)
+
 # Read images
 dataset_filename_list = listdir('./dataset')
 
@@ -26,25 +35,19 @@ for img_name in dataset_filename_list:
     img = PIL.Image.open(f'./dataset/{img_name}')
     dataset.append(np.array(img.convert('RGB')))
 
-#imshow(dataset[0])
-#plt.savefig('./normal_test.png')
-#print(dataset[0].shape)
+print_img_info(dataset, 'normal_test', False)
 
 # Resize images
 print('>>> Resizing images')
 resized_dataset = list(map(lambda imgarr : resize(imgarr, (128, 128)), dataset))
 
-#imshow(resized_dataset[0])
-#plt.savefig('./resized_test.png')
-#print(resized_dataset[0].shape)
+print_img_info(resized_dataset, 'resized_test', False)
 
 # Applying grayscale
 print('>>> Applying grayscale')
 grayscale_dataset = list(map(rgb2gray, resized_dataset))
 
-#imshow(grayscale_dataset[0])
-#plt.savefig('./grayscale_test.png')
-#print(grayscale_dataset[0].shape)
+print_img_info(grayscale_dataset, 'grayscale_test', False)
 
 # HOG
 # 16 x 16
