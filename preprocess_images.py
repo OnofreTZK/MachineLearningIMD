@@ -82,37 +82,66 @@ for img in grayscale_dataset:
 #plt.savefig('./hog20_test.png')
 #print(twenty_pixel_images[0][0].shape)
 
+# Creating list of classes
 print('>>> Generating dataframes')
 classes = []
 for name in dataset_filename_list:
-    if 'Ragdoll' in name or 'Bombay' in name:
-        classes.append('cat')
+
+    race_class = ''
+
+    if class1 in name:
+        race_class = class1
+    elif class2 in name:
+        race_class = class2
+    elif class3 in name:
+        race_class = class3
+    elif class4 in name:
+        race_class = class4
     else:
-        classes.append('dog')
+        race_class = class5
 
-dset_16 = {
-    'name' : dataset_filename_list,
-    'pixels' : sixteen_pixel_images,
-    'fd' : sixteen_pixel_fd,
-    'class' : classes
-}
+    classes.append(race_class.lower())
+
+# 16x16 dataframe and csv
+dset_16 = {}
+
+for fd_idx in range(0, len(sixteen_pixel_fd[0])):
+    key = f'fd_{fd_idx}'
+    value = []
+    for img_idx in range(0, len(sixteen_pixel_fd)):
+        value.append(sixteen_pixel_fd[img_idx][fd_idx])
+
+    dset_16.update({key: value})
+
+dset_16.update({'class' : classes})
+
 dataframe_sixteen = pd.DataFrame.from_dict(dset_16)
+# }}}
 
-dset_20 = {
-    'name' : dataset_filename_list,
-    'pixels' : twenty_pixel_images,
-    'fd' : twenty_pixel_fd,
-    'class' : classes
-}
+# 20x20 dataframe and csv
+dset_20 = {}
+
+for fd_idx in range(0, len(twenty_pixel_fd[0])):
+    key = f'fd_{fd_idx}'
+    value = []
+    for img_idx in range(0, len(twenty_pixel_fd)):
+        value.append(twenty_pixel_fd[img_idx][fd_idx])
+
+    dset_20.update({key: value})
+
+dset_20.update({'class' : classes})
+
 dataframe_twenty = pd.DataFrame.from_dict(dset_20)
+# }}}
 
+# Writing the csvs
 print('>>> Generating csv')
 dataframe_sixteen.to_csv('./csv/sixteen_pixel_hog.csv',
                          sep = ';',
-                         header = None,
+                         #header = None,
                          index = None)
 
 dataframe_sixteen.to_csv('./csv/twenty_pixel_hog.csv',
                          sep = ';',
-                         header = None,
+                         #header = None,
                          index = None)
