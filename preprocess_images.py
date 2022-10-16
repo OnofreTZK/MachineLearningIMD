@@ -138,10 +138,8 @@ dataframe_twenty = pd.DataFrame.from_dict(dset_20)
 print('>>> Generating csv')
 dataframe_sixteen.to_csv('./csv/sixteen_pixel_hog.csv',
                          sep = ';',
-                         #header = None,
                          index = None)
 
 dataframe_sixteen.to_csv('./csv/twenty_pixel_hog.csv',
                          sep = ';',
-                         #header = None,
                          index = None)
