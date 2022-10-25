@@ -13,30 +13,23 @@ import pandas as pd
 
 print('>>> Reading csv and creating dataframes')
 df_sixteen = pd.read_csv('./csv/sixteen_pixel_hog.csv', sep = ';')
-df_twenty = pd.read_csv('./csv/twenty_pixel_hog.csv', sep = ';')
 
 #print((df_sixteen.loc[df_sixteen['class']=='ragdoll']).count())
 # Standardizing
 features_16 = df_sixteen.columns.drop('class')
-features_20 = df_twenty.columns.drop('class')
 
 print('>>> Standardizing the attributes')
 X_16_scaled = StandardScaler().fit_transform(df_sixteen.loc[:, features_16].values)
-X_20_scaled = StandardScaler().fit_transform(df_twenty.loc[:, features_20].values)
 
 Y_16_classes = df_sixteen.loc[:, ['class']].values
-Y_20_classes = df_twenty.loc[:, ['class']].values
 
 # Applying PCA
-pca_16_components = 65
-pca_20_components = 30
+pca_16_components = 275
 
 pca_16 = PCA(n_components=pca_16_components)
-pca_20 = PCA(n_components=pca_20_components)
 
 print('>>> Applying PCA')
 applied_pca_16 = pca_16.fit_transform(X_16_scaled)
-applied_pca_20 = pca_20.fit_transform(X_20_scaled)
 
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Experimenting zone !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -64,7 +57,6 @@ def plot_pca_visu(fig_name, pca, n_components):
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 plot_pca_visu('pca_16', pca_16, pca_16_components)
-plot_pca_visu('pca_20', pca_20, pca_20_components)
 
 # After some runs I decided to use 65 components for 16 pixels and 30 components for 20 pixels.
 
@@ -73,17 +65,11 @@ print('>>> Generating Dataframes')
 pca_16_df = pd.DataFrame(data = applied_pca_16,
                          columns = [f'principal_component_{n}' for n in range(pca_16_components)])
 
-pca_20_df = pd.DataFrame(data = applied_pca_20,
-                         columns = [f'principal_component_{n}' for n in range(pca_20_components)])
 
 pca_16_with_class_df = pd.concat([pca_16_df, df_sixteen[['class']]], axis = 1)
-pca_20_with_class_df = pd.concat([pca_20_df, df_twenty[['class']]], axis = 1)
 
 print('>>> Generating csv')
 pca_16_with_class_df.to_csv('./csv/sixteen_pixel_pca.csv',
                             sep = ';',
                             index = None)
 
-pca_20_with_class_df.to_csv('./csv/twenty_pixel_pca.csv',
-                            sep = ';',
-                            index = None)
