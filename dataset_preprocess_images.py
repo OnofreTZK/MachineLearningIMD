@@ -140,6 +140,6 @@ dataframe_sixteen.to_csv('./csv/sixteen_pixel_hog.csv',
                          sep = ';',
                          index = None)
 
-dataframe_sixteen.to_csv('./csv/twenty_pixel_hog.csv',
+dataframe_twenty.to_csv('./csv/twenty_pixel_hog.csv',
                          sep = ';',
                          index = None)
