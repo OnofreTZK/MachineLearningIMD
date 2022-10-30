@@ -9,6 +9,7 @@ from sklearn.model_selection import cross_val_predict
 from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
 
 # Read the databases
 print('>>> Reading the CSVs')
@@ -91,4 +92,46 @@ for ds, base in zip(datasets, bases):
         print(f'90/10 {k}K Accuracy: {accuracy_90_10}')
         ks[f'k{k}'].append(accuracy_90_10)
 
+print('>>> Generating DataFrame')
+columns = ['base', 'training_test', '1k', '2k', '3k', '4k', '5k']
+data = []
+dataframe_bases = []
+training_tests = []
 
+for base in bases:
+    for _ in range(4):
+        dataframe_bases.append(base)
+
+dataframe_bases.append('mean')
+dataframe_bases.append('standard')
+
+data.append(dataframe_bases)
+
+for _ in range(4):
+    training_tests.append(training_test[0])
+    training_tests.append(training_test[1])
+    training_tests.append(training_test[2])
+    training_tests.append(training_test[3])
+
+training_tests.append('')
+training_tests.append('')
+
+data.append(training_tests)
+
+for result in ks.values():
+    result.append(mean(result))
+    result.append(std(result))
+    data.append(result)
+
+df = pd.DataFrame()
+
+columns.reverse()
+data.reverse()
+
+for col, row in zip(columns, data):
+    df.insert(loc=0, column=col, value=row)
+
+print(df.head)
+
+print('>>> Writing Excel')
+df.to_excel('./sheets/knn_results.xlsx', sheet_name='kNN Results')

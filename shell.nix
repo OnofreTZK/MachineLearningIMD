@@ -8,6 +8,7 @@ let
 
     requirements = ''
         pandas
+        openpyxl
         numpy
         mlflow
         sklearn
