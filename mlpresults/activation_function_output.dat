@@ -1,0 +1,16 @@
+10-fold const A identity Accuracy: 0.3955757575757576 (0.04456388450372132)
+70/30 const A identity Accuracy: 0.3926174496644295
+80/20 const A identity Accuracy: 0.3969849246231156
+90/10 const A identity Accuracy: 0.39
+10-fold const A logistic Accuracy: 0.4026464646464647 (0.04721333141604915)
+70/30 const A logistic Accuracy: 0.3959731543624161
+80/20 const A logistic Accuracy: 0.3969849246231156
+90/10 const A logistic Accuracy: 0.38
+10-fold const A tanh Accuracy: 0.40063636363636357 (0.0419187306777594)
+70/30 const A tanh Accuracy: 0.3859060402684564
+80/20 const A tanh Accuracy: 0.3969849246231156
+90/10 const A tanh Accuracy: 0.39
+10-fold const A relu Accuracy: 0.4106969696969697 (0.028925824025982105)
+70/30 const A relu Accuracy: 0.40604026845637586
+80/20 const A relu Accuracy: 0.4371859296482412
+90/10 const A relu Accuracy: 0.43
