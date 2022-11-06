@@ -150,6 +150,60 @@ def different_neurons():
     for result in tests_results:
             print(result)
 
+# 3
+def iterations():
+    '''Running MLP with different number of iterations'''
+    print('>>> Running MLP with different number of iterations')
+
+    ds = datasets[0]
+
+    iterations = [100, 1000, 5000]
+
+    # Features and classes
+    features = ds.columns.drop('class')
+    X = ds.loc[:, features].values
+    Y = ds.loc[:, ['class']].values
+
+    for iteration in iterations:
+        print(f'>>>>>> BASE: {bases[0]} | FUNC: relu | NEURONS: 884 | ITER: {iteration}')
+        mlp = MLPClassifier(hidden_layer_sizes=884,
+                            activation='relu',
+                            solver='adam',
+                            max_iter=iteration)
+
+        for_each_config(mlp, X, Y, f'iterations {iteration}')
+
+
+    for result in tests_results:
+            print(result)
+
+# 4
+def learn_rate():
+    '''Running MLP with different learning rate'''
+    print('>>> Running MLP with different learning rate')
+
+    ds = datasets[0]
+
+    rates = [0.001, 0.01, 0.1]
+
+    # Features and classes
+    features = ds.columns.drop('class')
+    X = ds.loc[:, features].values
+    Y = ds.loc[:, ['class']].values
+
+    for rate in rates:
+        print(f'>>>>>> BASE: {bases[0]} | FUNC: relu | NEURONS: 884 | ITER: 5000 | RATE: {rate}')
+        mlp = MLPClassifier(hidden_layer_sizes=884,
+                            activation='relu',
+                            solver='adam',
+                            max_iter=5000,
+                            learning_rate_init=rate)
+
+        for_each_config(mlp, X, Y, f'learning rate {rate}')
+
+
+    for result in tests_results:
+            print(result)
 
 
 
@@ -265,3 +319,11 @@ def different_neurons():
 # DONE const activation func to discover the best number of neurons
 # different_neurons()
 # Best number of neurons: 884
+
+# Done const func and neurons to discover the best number of iterations
+# iterations()
+# Best number of iterations: 5000
+
+# TODO const func, neurons and iterations to discover the best number of learning rate
+# learn_rate()
+# Best learning rate: 0.001
