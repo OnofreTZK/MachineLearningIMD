@@ -207,67 +207,6 @@ def learn_rate():
 
 
 
-#print('>>> Running MLP with n configurations on each dataset')
-#for ds, base in zip(datasets, bases):
-#    # Features and classes
-#    features = ds.columns.drop('class')
-#    X = ds.loc[:, features].values
-#    Y = ds.loc[:, ['class']].values
-#
-#    # KFold 10
-#    kf = KFold(n_splits=10, random_state=1, shuffle=True)
-#
-#    # Split percentage
-#    ## 70/30
-#    X_train_70, X_test_30, Y_train_70, Y_test_30 = train_test_split(X,
-#                                                                    Y,
-#                                                                    test_size=0.3,
-#                                                                    random_state=1)
-#
-#    ## 80/20
-#    X_train_80, X_test_20, Y_train_80, Y_test_20 = train_test_split(X,
-#                                                                    Y,
-#                                                                    test_size=0.2,
-#                                                                    random_state=1)
-#
-#    ## 90/10
-#    X_train_90, X_test_10, Y_train_90, Y_test_10 = train_test_split(X,
-#                                                                    Y,
-#                                                                    test_size=0.1,
-#                                                                    random_state=1)
-#
-#    for func in activation_funcs:
-#        print(f'>>>>>> BASE: {base} | K : {k}')
-#        # Create model object
-#        mlp = KNeighborsClassifier(n_neighbors=k, metric='euclidean')
-#
-#        # Accuracy
-#        # 10 fold cv
-#        scores = cross_val_score(mlp, X, Y.ravel(), scoring='accuracy', cv=kf)
-#        print(f'10-fold CV {k}K Accuracy: {mean(scores)} ({std(scores)})')
-#        ks[f'k{k}'].append(mean(scores))
-#
-#        # 70/30
-#        mlp.fit(X_train_70, Y_train_70.ravel())
-#        Y_pred_70_30 = mlp.predict(X_test_30)
-#        accuracy_70_30 = metrics.accuracy_score(Y_test_30, Y_pred_70_30)
-#        print(f'70/30 {k}K Accuracy: {accuracy_70_30}')
-#        ks[f'k{k}'].append(accuracy_70_30)
-#
-#        # 80/20
-#        mlp.fit(X_train_80, Y_train_80.ravel())
-#        Y_pred_80_20 = mlp.predict(X_test_20)
-#        accuracy_80_20 = metrics.accuracy_score(Y_test_20, Y_pred_80_20)
-#        print(f'80/20 {k}K Accuracy: {accuracy_80_20}')
-#        ks[f'k{k}'].append(accuracy_80_20)
-#
-#        # 90/10
-#        mlp.fit(X_train_90, Y_train_90.ravel())
-#        Y_pred_90_10 = mlp.predict(X_test_10)
-#        accuracy_90_10 = metrics.accuracy_score(Y_test_10, Y_pred_90_10)
-#        print(f'90/10 {k}K Accuracy: {accuracy_90_10}')
-#        ks[f'k{k}'].append(accuracy_90_10)
-#
 #print('>>> Generating DataFrame')
 #columns = ['base', 'training_test', '1k', '2k', '3k', '4k', '5k']
 #data = []
@@ -320,10 +259,10 @@ def learn_rate():
 # different_neurons()
 # Best number of neurons: 884
 
-# Done const func and neurons to discover the best number of iterations
+# DONE const func and neurons to discover the best number of iterations
 # iterations()
 # Best number of iterations: 5000
 
-# TODO const func, neurons and iterations to discover the best number of learning rate
+# DONE const func, neurons and iterations to discover the best number of learning rate
 # learn_rate()
 # Best learning rate: 0.001

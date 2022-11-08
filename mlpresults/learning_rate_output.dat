@@ -1,0 +1,12 @@
+10-fold learning_rate 0.001 Accuracy: 0.42381818181818176 (0.035592089815906065)
+70/30 learning_rate 0.001 Accuracy: 0.3959731543624161
+80/20 learning_rate 0.001 Accuracy: 0.4221105527638191
+90/10 learning_rate 0.001 Accuracy: 0.42
+10-fold learning_rate 0.01 Accuracy: 0.41375757575757577 (0.035628076866968963)
+70/30 learning_rate 0.01 Accuracy: 0.3825503355704698
+80/20 learning_rate 0.01 Accuracy: 0.4321608040201005
+90/10 learning_rate 0.01 Accuracy: 0.34
+10-fold learning_rate 0.1 Accuracy: 0.1876969696969697 (0.05929948168155651)
+70/30 learning_rate 0.1 Accuracy: 0.17785234899328858
+80/20 learning_rate 0.1 Accuracy: 0.20603015075376885
+90/10 learning_rate 0.1 Accuracy: 0.18
