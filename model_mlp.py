@@ -27,9 +27,10 @@ training_test = ['10-fold CV', '70/30', '80/20', '90/10']
 activation_funcs = ['identity', 'logistic', 'tanh', 'relu']
 
 tests_results = []
+result = []
 
 ## Auxiliar Functions
-def for_each_config(model, X, Y, config_description):
+def for_each_config(model, X, Y, config_description, is_experimenting):
     # KFold 10
     kf = KFold(n_splits=10, random_state=1, shuffle=True)
 
@@ -54,7 +55,10 @@ def for_each_config(model, X, Y, config_description):
     # 10 fold cv
     scores = cross_val_score(model, X, Y.ravel(), scoring='accuracy', cv=kf)
     aux_str = f'10-fold {config_description} Accuracy: {mean(scores)} ({std(scores)})'
-    tests_results.append(aux_str)
+    if is_experimenting :
+        tests_results.append(aux_str)
+    else:
+        result.append(mean(scores))
     print(aux_str)
 
     # 70/30
@@ -62,7 +66,10 @@ def for_each_config(model, X, Y, config_description):
     Y_pred_70_30 = model.predict(X_test_30)
     accuracy_70_30 = metrics.accuracy_score(Y_test_30, Y_pred_70_30)
     aux_str = f'70/30 {config_description} Accuracy: {accuracy_70_30}'
-    tests_results.append(aux_str)
+    if is_experimenting :
+        tests_results.append(aux_str)
+    else:
+        result.append(accuracy_70_30)
     print(aux_str)
 
     # 80/20
@@ -70,7 +77,10 @@ def for_each_config(model, X, Y, config_description):
     Y_pred_80_20 = model.predict(X_test_20)
     accuracy_80_20 = metrics.accuracy_score(Y_test_20, Y_pred_80_20)
     aux_str = f'80/20 {config_description} Accuracy: {accuracy_80_20}'
-    tests_results.append(aux_str)
+    if is_experimenting :
+        tests_results.append(aux_str)
+    else:
+        result.append(accuracy_80_20)
     print(aux_str)
 
     # 90/10
@@ -78,7 +88,10 @@ def for_each_config(model, X, Y, config_description):
     Y_pred_90_10 = model.predict(X_test_10)
     accuracy_90_10 = metrics.accuracy_score(Y_test_10, Y_pred_90_10)
     aux_str = f'90/10 {config_description} Accuracy: {accuracy_90_10}'
-    tests_results.append(aux_str)
+    if is_experimenting :
+        tests_results.append(aux_str)
+    else:
+        result.append(accuracy_90_10)
     print(aux_str)
 
 # TEST RUNS
@@ -103,7 +116,7 @@ def const_A():
                             solver='adam',
                             max_iter=500)
 
-        for_each_config(mlp, X, Y, f'const A {func}')
+        for_each_config(mlp, X, Y, f'const A {func}', True)
 
 
     for result in tests_results:
@@ -144,7 +157,7 @@ def different_neurons():
                             solver='adam',
                             max_iter=500)
 
-        for_each_config(mlp, X, Y, f'neurons {neuron}')
+        for_each_config(mlp, X, Y, f'neurons {neuron}', True)
 
 
     for result in tests_results:
@@ -171,14 +184,14 @@ def iterations():
                             solver='adam',
                             max_iter=iteration)
 
-        for_each_config(mlp, X, Y, f'iterations {iteration}')
+        for_each_config(mlp, X, Y, f'iterations {iteration}', True)
 
 
     for result in tests_results:
             print(result)
 
 # 4
-def learn_rate():
+def learning_rate():
     '''Running MLP with different learning rate'''
     print('>>> Running MLP with different learning rate')
 
@@ -199,57 +212,79 @@ def learn_rate():
                             max_iter=5000,
                             learning_rate_init=rate)
 
-        for_each_config(mlp, X, Y, f'learning rate {rate}')
+        for_each_config(mlp, X, Y, f'learning rate {rate}', True)
 
 
     for result in tests_results:
             print(result)
 
 
+def run_all_datasets():
+    '''Running MLP with my best configs to each dataset'''
+    print('>>> Running MLP in each dataset')
 
-#print('>>> Generating DataFrame')
-#columns = ['base', 'training_test', '1k', '2k', '3k', '4k', '5k']
-#data = []
-#dataframe_bases = []
-#training_tests = []
-#
-#for base in bases:
-#    for _ in range(4):
-#        dataframe_bases.append(base)
-#
-#dataframe_bases.append('mean')
-#dataframe_bases.append('standard')
-#
-#data.append(dataframe_bases)
-#
-#for _ in range(4):
-#    training_tests.append(training_test[0])
-#    training_tests.append(training_test[1])
-#    training_tests.append(training_test[2])
-#    training_tests.append(training_test[3])
-#
-#training_tests.append('')
-#training_tests.append('')
-#
-#data.append(training_tests)
-#
-#for result in ks.values():
-#    result.append(mean(result))
-#    result.append(std(result))
-#    data.append(result)
-#
-#df = pd.DataFrame()
-#
-#columns.reverse()
-#data.reverse()
-#
-#for col, row in zip(columns, data):
-#    df.insert(loc=0, column=col, value=row)
-#
-#print(df.head)
-#
-#print('>>> Writing Excel')
-#df.to_excel('./sheets/mlp_results.xlsx', sheet_name='Multilayer Perceptron Results')
+    for ds, base in zip(datasets, bases):
+
+        # Features and classes
+        features = ds.columns.drop('class')
+        X = ds.loc[:, features].values
+        Y = ds.loc[:, ['class']].values
+
+        print(f'>>>>>> BASE: {base} | FUNC: relu | NEURONS: 884 | ITER: 5000 | RATE: 0.001')
+        mlp = MLPClassifier(hidden_layer_sizes=884,
+                            activation='relu',
+                            solver='adam',
+                            max_iter=5000,
+                            learning_rate_init=0.001)
+
+        for_each_config(mlp, X, Y, f'BASE {base}', False)
+
+
+
+# Sheet zone
+def write_excel():
+    print('>>> Generating DataFrame')
+    columns = ['base', 'training_test', 'default']
+    data = []
+    dataframe_bases = []
+    training_tests = []
+
+    for base in bases:
+        for _ in range(4):
+            dataframe_bases.append(base)
+
+    dataframe_bases.append('mean')
+    dataframe_bases.append('standard')
+
+    data.append(dataframe_bases)
+
+    for _ in range(4):
+        training_tests.append(training_test[0])
+        training_tests.append(training_test[1])
+        training_tests.append(training_test[2])
+        training_tests.append(training_test[3])
+
+    training_tests.append('')
+    training_tests.append('')
+
+    data.append(training_tests)
+
+    result.append(mean(result))
+    result.append(std(result))
+    data.append(result)
+
+    df = pd.DataFrame()
+
+    columns.reverse()
+    data.reverse()
+
+    for col, row in zip(columns, data):
+        df.insert(loc=0, column=col, value=row)
+
+    print(df.head)
+
+    print('>>> Writing Excel')
+    df.to_excel('./sheets/mlp_results.xlsx', sheet_name='Multilayer Perceptron Results')
 
 # DONE const A to discover the best activation func to my base
 # const_A()
@@ -264,5 +299,8 @@ def learn_rate():
 # Best number of iterations: 5000
 
 # DONE const func, neurons and iterations to discover the best number of learning rate
-# learn_rate()
+# learning_rate()
 # Best learning rate: 0.001
+
+run_all_datasets()
+write_excel()
