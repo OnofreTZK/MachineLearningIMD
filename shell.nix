@@ -10,6 +10,7 @@ let
         pandas
         openpyxl
         numpy
+        scipy
         mlflow
         sklearn
         scikit-image
